@@ -3,390 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOTHER OS // GLOBAL_ARCHIVE_v4.0</title>
-    <!-- lore_data.js を読み込む（ローカル実行時は同じディレクトリに配置） -->
+    <title>CCC // INDUCTION_PORTAL_V2</title>
     <script src="./lore_data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap');
 
         :root {
-            --bg-deep: #020202;
-            --sidebar-bg: #0a0a0a;
+            --bg-deep: #050505;
             --accent-ai: #00ff66;
+            --accent-sec: #05d9e8;
             --accent-warn: #ff2a6d;
-            --accent-info: #05d9e8;
-            --accent-dim: #003314;
             --text-main: #e0e0e0;
             --text-dim: #888;
-            --border-color: rgba(0, 255, 102, 0.2);
-            --font-main: 'Noto Sans JP', sans-serif;
-            --font-header: 'Orbitron', sans-serif;
+            --sidebar-width: 280px;
         }
 
         * { box-sizing: border-box; }
         body {
             background-color: var(--bg-deep);
             color: var(--text-main);
-            font-family: var(--font-main);
+            font-family: 'Noto Sans JP', sans-serif;
             margin: 0;
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
-        /* --- Header --- */
-        header {
-            height: 60px;
-            background: var(--sidebar-bg);
-            border-bottom: 1px solid var(--accent-ai);
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            border-right: 1px solid #222;
+            background: #0a0a0a;
             display: flex;
-            align-items: center;
-            padding: 0 30px;
-            justify-content: space-between;
+            flex-direction: column;
+            transition: left 0.3s ease;
             z-index: 1000;
         }
 
-        .logo {
-            font-family: var(--font-header);
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
             color: var(--accent-ai);
-            letter-spacing: 3px;
-            font-weight: bold;
+            margin: 0 0 15px 0;
+            letter-spacing: 2px;
         }
 
-        .search-bar {
-            width: 400px;
-            position: relative;
-        }
-
-        .search-bar input {
+        .search-box {
             width: 100%;
-            background: #000;
-            border: 1px solid var(--accent-dim);
-            color: var(--accent-ai);
-            padding: 8px 15px;
-            border-radius: 4px;
-            outline: none;
-            font-family: var(--font-header);
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 12px;
             font-size: 0.8rem;
+            outline: none;
+            border-radius: 4px;
         }
 
-        .search-bar input:focus {
-            border-color: var(--accent-ai);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-        }
-
-        /* --- Main Layout --- */
-        .main-container {
-            display: flex;
+        .nav-scroll {
             flex-grow: 1;
-            overflow: hidden;
-        }
-
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 320px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
             overflow-y: auto;
-            padding-bottom: 50px;
+            padding: 10px 0;
         }
 
         .nav-group {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        .nav-group-title {
-            padding: 15px 25px;
-            font-family: var(--font-header);
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            letter-spacing: 1px;
+        .group-label {
+            padding: 5px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            color: var(--accent-sec);
             text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            letter-spacing: 1px;
+            background: rgba(5, 217, 232, 0.05);
+            display: block;
         }
 
         .nav-item {
-            padding: 12px 35px;
-            font-size: 0.9rem;
-            color: var(--text-main);
+            padding: 10px 20px 10px 30px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
             cursor: pointer;
-            transition: 0.2s;
-            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
         }
 
         .nav-item:hover {
-            background: rgba(0, 255, 102, 0.05);
             color: var(--accent-ai);
+            background: rgba(0, 255, 102, 0.05);
         }
 
         .nav-item.active {
-            background: rgba(0, 255, 102, 0.1);
             color: var(--accent-ai);
-            border-left: 3px solid var(--accent-ai);
+            background: rgba(0, 255, 102, 0.1);
+            border-left: 2px solid var(--accent-ai);
         }
 
-        /* --- Content Area --- */
-        .content-area {
+        /* --- Main Content Area --- */
+        .main-content {
             flex-grow: 1;
-            padding: 60px 80px;
+            height: 100vh;
             overflow-y: auto;
-            background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwyNTUsMTAyLDAuMDUpIi8+PC9zdmc+');
+            padding: 60px 40px;
+            scroll-behavior: smooth;
         }
 
         .article-container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .breadcrumbs {
-            font-family: var(--font-header);
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.7rem;
-            color: var(--accent-info);
-            margin-bottom: 30px;
-            text-transform: uppercase;
+            color: var(--accent-sec);
+            margin-bottom: 10px;
+            opacity: 0.7;
         }
 
-        h1 {
-            font-family: var(--font-header);
-            font-size: 2.5rem;
-            color: var(--accent-ai);
-            margin: 0 0 40px 0;
-            border-bottom: 2px solid var(--accent-dim);
-            padding-bottom: 20px;
-            text-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        h1#articleTitle {
+            font-size: 2.2rem;
+            color: #fff;
+            margin: 0 0 30px 0;
+            border-left: 4px solid var(--accent-ai);
+            padding-left: 20px;
         }
 
         .article-body {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: #d1d1d1;
         }
 
-        .article-body p { margin-bottom: 25px; }
+        /* Markdown-like rendering styles */
         .article-body h2 {
-            font-family: var(--font-header);
-            font-size: 1.5rem;
-            color: #fff;
-            margin-top: 50px;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--accent-ai);
-            padding-left: 20px;
+            color: var(--accent-ai);
+            font-size: 1.3rem;
+            margin: 40px 0 20px 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
         }
 
+        .article-body p { margin-bottom: 20px; }
+
         .article-body ul {
-            padding-left: 30px;
-            margin-bottom: 30px;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            list-style: none;
         }
 
         .article-body li {
-            margin-bottom: 15px;
+            position: relative;
+            margin-bottom: 10px;
         }
 
-        .info-box {
-            background: rgba(0, 255, 102, 0.05);
-            border: 1px solid var(--accent-ai);
-            padding: 25px;
-            margin: 40px 0;
+        .article-body li::before {
+            content: '>';
+            position: absolute;
+            left: -20px;
+            color: var(--accent-ai);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+        }
+
+        .gm-note {
+            background: rgba(255, 42, 109, 0.05);
+            border: 1px solid rgba(255, 42, 109, 0.3);
+            padding: 15px 20px;
+            margin: 30px 0;
             position: relative;
         }
 
-        .info-box::before {
-            content: 'AI_MEMO';
+        .gm-note::before {
+            content: 'GM_CONFIDENTIAL';
             position: absolute;
-            top: -10px; left: 20px;
-            background: var(--accent-ai);
-            color: #000;
-            font-family: var(--font-header);
+            top: -10px;
+            left: 10px;
+            background: var(--bg-deep);
+            color: var(--accent-warn);
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.6rem;
-            padding: 2px 8px;
+            padding: 0 5px;
         }
 
-        /* --- Search Results Overlay --- */
-        .search-results {
-            position: absolute;
-            top: 55px; left: 0;
-            width: 100%;
-            background: #111;
-            border: 1px solid var(--accent-ai);
-            max-height: 400px;
-            overflow-y: auto;
+        /* --- Mobile UI --- */
+        .mobile-header {
             display: none;
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 50px;
+            background: #111;
+            border-bottom: 1px solid #333;
+            z-index: 1100;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .search-result-item {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .menu-btn {
+            background: none;
+            border: 1px solid var(--accent-ai);
+            color: var(--accent-ai);
+            padding: 4px 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
             cursor: pointer;
         }
 
-        .search-result-item:hover {
-            background: rgba(0, 255, 102, 0.1);
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 950;
         }
 
-        .result-title {
-            color: var(--accent-ai);
-            font-weight: bold;
-            font-size: 0.9rem;
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 50px;
+                height: calc(100vh - 50px);
+                width: 85%;
+            }
+            .sidebar.open { left: 0; }
+            .main-content { padding: 80px 20px; }
+            .sidebar-overlay.active { display: block; }
+            h1#articleTitle { font-size: 1.6rem; }
         }
-
-        .result-snippet {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-top: 5px;
-        }
-
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--accent-dim); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-ai); }
 
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">MOTHER_OS // GLOBAL_ARCHIVE</div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="SEARCH ENTIRE ARCHIVE..." onkeyup="handleSearch()">
-            <div class="search-results" id="searchResults"></div>
-        </div>
-        <div class="logo" style="font-size: 0.7rem; color: var(--text-dim);">BUILD_ID: 2126.04.23.DEEP</div>
-    </header>
+    <div class="mobile-header">
+        <button class="menu-btn" onclick="toggleSidebar()">MENU</button>
+        <div style="font-family:'Orbitron'; font-size:0.7rem; color:var(--accent-ai);">DEEP_LORE_PORTAL</div>
+    </div>
 
-    <div class="main-container">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar" id="sidebar">
-            <!-- Groups will be injected here -->
-        </div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-        <!-- Content Area -->
-        <div class="content-area">
-            <div class="article-container" id="articleContainer">
-                <div class="breadcrumbs" id="breadcrumbs">HOME > START</div>
-                <h1 id="articleTitle">WELCOM TO MOTHER_OS</h1>
-                <div class="article-body" id="articleBody">
-                    <p>サイドバーから項目を選択して、クレイドルの詳細データを閲覧してください。</p>
-                    <p>全てのデータはAIクロノス・マザーによって観測・編纂された公式記録です。</p>
-                </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>MOTHER_ARCHIVE</h2>
+            <input type="text" class="search-box" placeholder="SEARCH_DATABASE..." id="searchBox" oninput="handleSearch()">
+        </div>
+        <div class="nav-scroll" id="sidebarNav">
+            <!-- Items injected by JS -->
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="article-container" id="articleContainer">
+            <div class="breadcrumbs" id="breadcrumbs">SYSTEM > STANDBY</div>
+            <h1 id="articleTitle">READY_FOR_INDUCTION</h1>
+            <div class="article-body" id="articleBody">
+                <p>左側のメニューから機密情報を選択してください。各項目には評議会の内部情報、AIの指令、そしてクレイドルの真実が含まれています。</p>
             </div>
         </div>
     </div>
 
     <script>
-        // サイドバーの初期化
-        function initSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.innerHTML = '';
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
 
-            for (const key in CCC_DATA) {
-                const group = CCC_DATA[key];
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'nav-group';
+        function initSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            nav.innerHTML = '';
+
+            for (const groupKey in CCC_DATA) {
+                const group = CCC_DATA[groupKey];
                 
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'nav-group-title';
-                titleDiv.innerText = group.title;
-                groupDiv.appendChild(titleDiv);
+                const label = document.createElement('div');
+                label.className = 'group-label';
+                label.innerText = group.title;
+                nav.appendChild(label);
+
+                const groupContainer = document.createElement('div');
+                groupContainer.className = 'nav-group';
 
                 group.sections.forEach(section => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'nav-item';
-                    itemDiv.innerText = section.title;
-                    itemDiv.onclick = () => loadArticle(key, section.id);
-                    groupDiv.appendChild(itemDiv);
+                    const item = document.createElement('div');
+                    item.className = 'nav-item';
+                    item.innerText = section.title;
+                    item.onclick = () => {
+                        loadArticle(groupKey, section.id);
+                        if (window.innerWidth <= 768) toggleSidebar();
+                    };
+                    groupContainer.appendChild(item);
                 });
-
-                sidebar.appendChild(groupDiv);
+                nav.appendChild(groupContainer);
             }
         }
 
-        // 記事の読み込み
         function loadArticle(groupKey, sectionId) {
             const group = CCC_DATA[groupKey];
             const section = group.sections.find(s => s.id === sectionId);
-
             if (!section) return;
 
-            // UI更新
+            // Highlight active menu item
             document.querySelectorAll('.nav-item').forEach(el => {
                 el.classList.toggle('active', el.innerText === section.title);
             });
 
-            document.getElementById('breadcrumbs').innerText = `${group.title} > ${section.title}`;
+            // Update UI
+            document.getElementById('breadcrumbs').innerText = `${group.title} > ${section.id}`;
             document.getElementById('articleTitle').innerText = section.title;
-            
-            // 内容をパースして表示
-            let bodyHtml = section.content.split('\n').map(line => {
+
+            // Simple Markdown-like Parser
+            let contentHtml = section.content.split('\n').map(line => {
                 line = line.trim();
+                if (!line) return '';
+
                 if (line.startsWith('■') || line.startsWith('【')) {
                     return `<h2>${line}</h2>`;
                 }
-                if (line.startsWith('・')) {
-                    return `<ul><li>${line.substring(1)}</li></ul>`;
+                if (line.startsWith('・') || line.startsWith('-')) {
+                    return `<ul><li>${line.substring(1).trim()}</li></ul>`;
                 }
-                if (line.length > 0) {
-                    return `<p>${line}</p>`;
+                if (line.startsWith('■ GM_NOTE') || line.startsWith('GM_NOTE')) {
+                    return `<div class="gm-note">${line}</div>`;
                 }
-                return '';
+                return `<p>${line}</p>`;
             }).join('');
 
-            // 箇条書きの連続を統合
-            bodyHtml = bodyHtml.replace(/<\/ul><ul>/g, '');
+            // Clean up UL clusters
+            contentHtml = contentHtml.replace(/<\/ul><ul>/g, '');
 
-            document.getElementById('articleBody').innerHTML = bodyHtml;
-            document.querySelector('.content-area').scrollTop = 0;
+            document.getElementById('articleBody').innerHTML = contentHtml;
+            document.querySelector('.main-content').scrollTop = 0;
         }
 
-        // 検索処理
         function handleSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const resultsDiv = document.getElementById('searchResults');
-
-            if (query.length < 2) {
-                resultsDiv.style.display = 'none';
-                return;
-            }
-
-            const results = [];
-            for (const key in CCC_DATA) {
-                const group = CCC_DATA[key];
-                group.sections.forEach(section => {
-                    if (section.title.toLowerCase().includes(query) || section.content.toLowerCase().includes(query)) {
-                        results.push({ groupKey: key, sectionId: section.id, title: section.title, snippet: section.content.substring(0, 100) + '...' });
-                    }
-                });
-            }
-
-            if (results.length > 0) {
-                resultsDiv.innerHTML = results.map(r => `
-                    <div class="search-result-item" onclick="loadArticle('${r.groupKey}', '${r.sectionId}'); hideSearch();">
-                        <div class="result-title">${r.title}</div>
-                        <div class="result-snippet">${r.snippet}</div>
-                    </div>
-                `).join('');
-                resultsDiv.style.display = 'block';
-            } else {
-                resultsDiv.style.display = 'none';
-            }
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const items = document.querySelectorAll('.nav-item');
+            
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+            });
         }
 
-        function hideSearch() {
-            document.getElementById('searchResults').style.display = 'none';
-            document.getElementById('searchInput').value = '';
-        }
-
-        // 初期化実行
         window.onload = () => {
             if (typeof CCC_DATA !== 'undefined') {
                 initSidebar();
             } else {
-                console.error("LORE_DATA NOT FOUND. Please ensure lore_data.js is loaded.");
+                document.getElementById('articleBody').innerHTML = '<p style="color:red">ERROR: lore_data.js could not be loaded.</p>';
             }
         };
     </script>
