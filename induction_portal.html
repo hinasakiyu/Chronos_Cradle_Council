@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTHER OS // GLOBAL_ARCHIVE_v4.0</title>
+    <!-- lore_data.js を読み込む（ローカル実行時は同じディレクトリに配置） -->
+    <script src="./lore_data.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-deep: #020202;
+            --sidebar-bg: #0a0a0a;
+            --accent-ai: #00ff66;
+            --accent-warn: #ff2a6d;
+            --accent-info: #05d9e8;
+            --accent-dim: #003314;
+            --text-main: #e0e0e0;
+            --text-dim: #888;
+            --border-color: rgba(0, 255, 102, 0.2);
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-header: 'Orbitron', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            height: 60px;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--accent-ai);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: var(--font-header);
+            color: var(--accent-ai);
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .search-bar {
+            width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--accent-dim);
+            color: var(--accent-ai);
+            padding: 8px 15px;
+            border-radius: 4px;
+            outline: none;
+            font-family: var(--font-header);
+            font-size: 0.8rem;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--accent-ai);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        /* --- Main Layout --- */
+        .main-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 320px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 50px;
+        }
+
+        .nav-group {
+            margin-bottom: 10px;
+        }
+
+        .nav-group-title {
+            padding: 15px 25px;
+            font-family: var(--font-header);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .nav-item {
+            padding: 12px 35px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 255, 102, 0.05);
+            color: var(--accent-ai);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-ai);
+            border-left: 3px solid var(--accent-ai);
+        }
+
+        /* --- Content Area --- */
+        .content-area {
+            flex-grow: 1;
+            padding: 60px 80px;
+            overflow-y: auto;
+            background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwyNTUsMTAyLDAuMDUpIi8+PC9zdmc+');
+        }
+
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .breadcrumbs {
+            font-family: var(--font-header);
+            font-size: 0.7rem;
+            color: var(--accent-info);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: var(--font-header);
+            font-size: 2.5rem;
+            color: var(--accent-ai);
+            margin: 0 0 40px 0;
+            border-bottom: 2px solid var(--accent-dim);
+            padding-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        }
+
+        .article-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d1d1d1;
+        }
+
+        .article-body p { margin-bottom: 25px; }
+        .article-body h2 {
+            font-family: var(--font-header);
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-ai);
+            padding-left: 20px;
+        }
+
+        .article-body ul {
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+
+        .article-body li {
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid var(--accent-ai);
+            padding: 25px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .info-box::before {
+            content: 'AI_MEMO';
+            position: absolute;
+            top: -10px; left: 20px;
+            background: var(--accent-ai);
+            color: #000;
+            font-family: var(--font-header);
+            font-size: 0.6rem;
+            padding: 2px 8px;
+        }
+
+        /* --- Search Results Overlay --- */
+        .search-results {
+            position: absolute;
+            top: 55px; left: 0;
+            width: 100%;
+            background: #111;
+            border: 1px solid var(--accent-ai);
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background: rgba(0, 255, 102, 0.1);
+        }
+
+        .result-title {
+            color: var(--accent-ai);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .result-snippet {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-dim); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-ai); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">MOTHER_OS // GLOBAL_ARCHIVE</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="SEARCH ENTIRE ARCHIVE..." onkeyup="handleSearch()">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        <div class="logo" style="font-size: 0.7rem; color: var(--text-dim);">BUILD_ID: 2126.04.23.DEEP</div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <!-- Groups will be injected here -->
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="article-container" id="articleContainer">
+                <div class="breadcrumbs" id="breadcrumbs">HOME > START</div>
+                <h1 id="articleTitle">WELCOM TO MOTHER_OS</h1>
+                <div class="article-body" id="articleBody">
+                    <p>サイドバーから項目を選択して、クレイドルの詳細データを閲覧してください。</p>
+                    <p>全てのデータはAIクロノス・マザーによって観測・編纂された公式記録です。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // サイドバーの初期化
+        function initSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = '';
+
+            for (const key in CCC_DATA) {
+                const group = CCC_DATA[key];
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'nav-group';
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'nav-group-title';
+                titleDiv.innerText = group.title;
+                groupDiv.appendChild(titleDiv);
+
+                group.sections.forEach(section => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'nav-item';
+                    itemDiv.innerText = section.title;
+                    itemDiv.onclick = () => loadArticle(key, section.id);
+                    groupDiv.appendChild(itemDiv);
+                });
+
+                sidebar.appendChild(groupDiv);
+            }
+        }
+
+        // 記事の読み込み
+        function loadArticle(groupKey, sectionId) {
+            const group = CCC_DATA[groupKey];
+            const section = group.sections.find(s => s.id === sectionId);
+
+            if (!section) return;
+
+            // UI更新
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.toggle('active', el.innerText === section.title);
+            });
+
+            document.getElementById('breadcrumbs').innerText = `${group.title} > ${section.title}`;
+            document.getElementById('articleTitle').innerText = section.title;
+            
+            // 内容をパースして表示
+            let bodyHtml = section.content.split('\n').map(line => {
+                line = line.trim();
+                if (line.startsWith('■') || line.startsWith('【')) {
+                    return `<h2>${line}</h2>`;
+                }
+                if (line.startsWith('・')) {
+                    return `<ul><li>${line.substring(1)}</li></ul>`;
+                }
+                if (line.length > 0) {
+                    return `<p>${line}</p>`;
+                }
+                return '';
+            }).join('');
+
+            // 箇条書きの連続を統合
+            bodyHtml = bodyHtml.replace(/<\/ul><ul>/g, '');
+
+            document.getElementById('articleBody').innerHTML = bodyHtml;
+            document.querySelector('.content-area').scrollTop = 0;
+        }
+
+        // 検索処理
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsDiv = document.getElementById('searchResults');
+
+            if (query.length < 2) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            const results = [];
+            for (const key in CCC_DATA) {
+                const group = CCC_DATA[key];
+                group.sections.forEach(section => {
+                    if (section.title.toLowerCase().includes(query) || section.content.toLowerCase().includes(query)) {
+                        results.push({ groupKey: key, sectionId: section.id, title: section.title, snippet: section.content.substring(0, 100) + '...' });
+                    }
+                });
+            }
+
+            if (results.length > 0) {
+                resultsDiv.innerHTML = results.map(r => `
+                    <div class="search-result-item" onclick="loadArticle('${r.groupKey}', '${r.sectionId}'); hideSearch();">
+                        <div class="result-title">${r.title}</div>
+                        <div class="result-snippet">${r.snippet}</div>
+                    </div>
+                `).join('');
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.style.display = 'none';
+            }
+        }
+
+        function hideSearch() {
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+        }
+
+        // 初期化実行
+        window.onload = () => {
+            if (typeof CCC_DATA !== 'undefined') {
+                initSidebar();
+            } else {
+                console.error("LORE_DATA NOT FOUND. Please ensure lore_data.js is loaded.");
+            }
+        };
+    </script>
+</body>
+</html>
