@@ -248,6 +248,15 @@
                 <div class="nav-item" onclick="showView('sociology')">HUMAN_RESOURCE_MAP</div>
                 <div class="nav-item" onclick="showView('governance')">COUNCIL_AUTHORITY</div>
                 <div class="nav-item" onclick="showView('glossary')">DATABASE_ARCHIVE</div>
+                
+                <!-- SECRET_GATE: 深層アーカイブへの隠し入り口 -->
+                <div class="nav-item secret-gate" style="margin-top: auto; opacity: 0.15; font-size: 0.65rem; border-left: none; transition: opacity 0.5s;" 
+                     onclick="window.location.href='induction_portal.html'"
+                     onmouseover="this.style.opacity='0.8'; this.style.color='var(--accent-warn)';"
+                     onmouseout="this.style.opacity='0.15'; this.style.color='var(--text-dim)';"
+                     title="UNAUTHORIZED_ACCESS_DETECTED">
+                    >> ERROR: RESTRICTED_NODE_7F
+                </div>
             </div>
 
             <div class="content-container">
